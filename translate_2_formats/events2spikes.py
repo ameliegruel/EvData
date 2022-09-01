@@ -5,7 +5,6 @@ Function to transform events stored as a list of [x,y,t,p] to a SpikeSourceArray
 
 Arguments:
 - events (numpy array): events to be reduced
-- coord_t (int): index of the timestamp coordinate 
 Returns:
 - spikes (2D list): events traduced as to be understood by Pynn as a SpikeSourceArray
 - width (int): width of the sensor
@@ -16,10 +15,14 @@ Date: 09/2021
 """
 
 import numpy as np
-from tqdm import tqdm
-# import matplotlib.pyplot as plt
+import sys
+sys.path.append('../read_event_data')
+from loadData import getFormat
 
-def ev2spikes(events,coord_t):
+def ev2spikes(events):
+    format_ev = getFormat(events)
+    coord_t = format_ev.index('t')
+
     if not 1<coord_t<4:
         raise ValueError("coord_t must equals 2 or 3")
     
@@ -30,11 +33,3 @@ def ev2spikes(events,coord_t):
     for x,y,*r in events:
         spikes[int(x)*height+int(y)].append(float(r[coord_t]))
     return spikes, width, height
-
-# if __name__=="__main__":
-#     a=np.load("Results/events_HR.npy")
-#     r=ev2spikes2(a,2)
-#     print(len(r))
-#     print(sum(map(len,r)))
-#     print(a.shape)
-#     # # print(*map(lambda x:1 if x>0,r)) ## heatmap en fonction du nb d'events par pixel
