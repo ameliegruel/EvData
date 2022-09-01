@@ -5,11 +5,16 @@ All scripts are written in Python3 or in Bash.
 ## Read event data
 
 ### read_event_data/loadData.py
+
+#### Load data
 The function ```load_data``` takes as input the path to an event file and opens it. It handles input files with extention ```npy```, ```npz```, ```hdf5``` and ```aedat``` (corresponding to aedat2, not aedat4). 
 
 The events read in ```npz``` and ```aedat``` files are output as *xypt*. The events read in ```npy``` and ```hdf5``` files are as read.
 
 The ```loaderdat``` function is adapted from [here](https://github.com/SensorsINI/processAEDAT/blob/master/jAER_utils/loadaerdat.py).
+
+#### Get events' format
+The function ```getFormat``` takes an event sample and outputs the corresponding format as a string of "x" (x coordinates),"y" (y coordinates),"p" (polarity),"t" (timestamps). The index of each information can be obtained using ```index()```. 
 
 ## Translate to different formats
 Events can be saved under different formats, either as one combinason of *xypt* or under a totally different formalism. These scripts translate *xypt* data into formalism specifically adaptated to various SNN simulators. 
