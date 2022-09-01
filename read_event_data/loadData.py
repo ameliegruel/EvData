@@ -135,3 +135,30 @@ def loadData(file_name):
         ev = loadaerdat(file_name)
 
     return ev
+
+def getFormat(ev):
+    string_coord = [None]*4
+    set_coord = [2,3]
+    
+    if max(ev[:,2]) in [0,1]:
+        coord_p = 2
+        set_coord.remove(2)
+    elif max(ev[:,3]) in [0,1]:
+        coord_p = 3
+        set_coord.remove(3)
+    string_coord[coord_p] = 'p'
+
+    if max(ev[:,0]) > 1e6:
+        coord_ts = 0
+        coord_x = 1
+        coord_y = set_coord[0]
+    else:
+        coord_ts = set_coord[0]
+        coord_x = 0
+        coord_y = 1
+    
+    string_coord[coord_x] = 'x'
+    string_coord[coord_y] = 'y'
+    string_coord[coord_ts] = 't'
+    
+    return ''.join(string_coord)
