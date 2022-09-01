@@ -42,3 +42,12 @@ The script's input arguments are:
 - ```nb``` (int, optional): number of events to keep in the first ones present in the sample
 - ```nb_train``` (int, optional): number of samples to keep in train
 - ```nb_test``` (int, optional): number of samples to keep in test
+
+## Generate new event data
+
+### Create duo of event samples
+The function ```get``` of the script ```createDuo.py``` takes two event samples as input then combines those two, alternating them according to a certain shift ; thus creating a new rectangular event sample where the two initial samples will appear alternatively in two difference places, overlapping over time. The output sample keeps the same height but doubles the original width. 
+
+### Create trio of event samples
+The function ```get``` of the script ```createTrio.py``` takes three event samples as input then combines those three, alternating them according to a certain shift ; thus creating a new rectangular event sample where the two initial samples will appear alternatively in three different place, overlapping over time. The argument ```shape```, either "line" or "square", determines wether the samples will be added on a line (outputing a sample with the same original height but a tripled width) ; or in a square (outputing a sample with doubled height and width). 
+Some examples are given in the main part of the script. 
