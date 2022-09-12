@@ -16,10 +16,10 @@ Date: 09/2021
 
 import numpy as np
 import sys
-sys.path.append('../read_event_data')
+sys.path.append('/home/amelie/Scripts/EvData/read_event_data')
 from loadData import getFormat
 
-def ev2spikes(events):
+def ev2spikes(events, width=None, height=None):
     format_ev = getFormat(events)
     coord_t = format_ev.index('t')
 
@@ -27,7 +27,12 @@ def ev2spikes(events):
         raise ValueError("coord_t must equals 2 or 3")
     
     coord_t-=2
-    width,height=int(np.max(events[::,0]))+1,int(np.max(events[::,1]))+1
+    if width == None or height == None: 
+        w,h=int(np.max(events[::,0]))+1,int(np.max(events[::,1]))+1
+        if width == None:
+            width = w
+        if height == None:
+            height = h
 
     spikes=[[] for _ in range(width*height)]
     for x,y,*r in events:
