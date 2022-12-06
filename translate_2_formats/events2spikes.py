@@ -20,8 +20,10 @@ sys.path.append('/home/amelie/Scripts/EvData/read_event_data')
 from loadData import getFormat
 
 def ev2spikes(events, width=None, height=None):
+    
     format_ev = getFormat(events)
     coord_t = format_ev.index('t')
+    events = events[events[:,coord_t].argsort()]
 
     if not 1<coord_t<4:
         raise ValueError("coord_t must equals 2 or 3")
