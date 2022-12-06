@@ -1,5 +1,7 @@
 import numpy as np
-import hdf5 as h
+import h5py as h
+from mat4py import loadmat
+from tqdm import tqdm
 
 def loadaerdat(datafile, debug=1, camera='DVS128'):
     """
@@ -113,6 +115,19 @@ def loadaerdat(datafile, debug=1, camera='DVS128'):
 
     return events
 
+
+def loadtxt(file_name):
+    events = []
+    f = open(file_name, 'r')
+    i = 0
+    for line in tqdm(f.readlines()):
+        if line != '':
+            events.append([[float(e) for e in line.split()]])
+            i += 1
+    
+    return np.concatenate(events).astype('float')
+
+
 def loadData(file_name):
     if file_name.endswith('npy'): 
         ev = np.load(file_name)
@@ -133,6 +148,22 @@ def loadData(file_name):
     
     elif file_name.endswith('aedat'):
         ev = loadaerdat(file_name)
+
+    elif file_name.endswith('mat'):
+        ev = loadmat(file_name)
+        if 'TD' in ev.keys():
+            ev = np.concatenate((
+                ev['TD']["x"],
+                ev['TD']["y"],
+                ev['TD']["p"],
+                ev['TD']["ts"]
+            ), axis=1).astype('float64')
+
+        else: 
+            raise Exception('The handling of this type of data is not yet implemented.')
+
+    else: 
+        raise Exception('The handling of this type of data is not yet implemented. loadData can read events in format "csv","npy","npz","hdf5","aedat" and "mat".')
 
     return ev
 
