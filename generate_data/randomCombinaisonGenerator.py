@@ -85,7 +85,10 @@ if args.shift > -1:
     ff = 'combinations_'+combination+'_shift'+str(args.shift)+'_'+date_time
     assert args.trio == False
 
-final_folder = os.path.join(args.dataset, ff)
+final_folder = os.path.join(
+    args.dataset.replace('original_data','').replace('//','/'),
+    ff
+)
 os.makedirs(final_folder)
 
 for n in range(len(samples[0])):
@@ -114,8 +117,10 @@ for n in range(len(samples[0])):
 
     list_samples.append((first.copy(),samples[0][n]))
     list_samples.append((second.copy(),samples[1][n]))
+
     second[:,format.index('x')] += max(first[:,format.index('x')])
     sample_n = np.vstack((first, second))
+    sample_n = sample_n[sample_n[:,format.index('t')].argsort()]  # this method needs the events to be sorted according to the timestamps 
 
     if args.trio:
         third = loadData.loadData(samples[2][n])
