@@ -4,20 +4,24 @@
 #   2) fps (optionnal, default=24): number of frames per second in the input RGB video
 # 05/21 - Amélie Gruel (I3S, Université Côte d'Azur, France)
 
-dataset=$1
+dataset=''
 fps=24
+visu='false'
 
-print_usage() {
-  printf "Usage: ..."
-}
-
-while getopts 'f:' flag; do
-  case "${flag}" in
+OPTSTRING="d:f:"
+while getopts $OPTSTRING flag; do
+  case $flag in
     f) fps="${OPTARG}" ;;
-    *) print_usage
-       exit 1 ;;
+    d) dataset="${OPTARG}" ;;
+    ?) echo "[Error] The correct options are -d (link to the dataset with RGB videos), -f (number of frames per second, by default 24) and -v (to visualise the events produced)."
+       exit 1;;
   esac
 done
+
+if [[ $dataset == '' ]]; then
+    echo "[Error] The dataset must be defined using the -d flag."; 
+    exit 1;
+fi
 
 for file in $(ls -R $dataset); do
     filename=`echo $file | sed 's,^.*[^/]*/,,'`
