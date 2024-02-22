@@ -6,6 +6,7 @@ import os
 import numpy as np
 import re
 from skimage import io
+from datetime import datetime as dt
 
 ### set up parser
 parser = argparse.ArgumentParser(description="Get timestamps for an image dataset given as input")
@@ -87,7 +88,7 @@ def produceEvents(
     use_log = True
     H, W, _ = io.imread( 
         os.path.join( dataset, os.listdir(dataset)[0] )
-    ).shape  # heigth and wideness of images (high resolution)
+    ).shape  # height and wideness of images (high resolution)
 
     event_simulator = esim_py.EventSimulator(contrast_threshold_positive, contrast_threshold_negative, refractory_period, log_eps, use_log)
     events = event_simulator.generateFromFolder(image_folder, timestamps_file)
@@ -112,4 +113,6 @@ def produceEvents(
 for (rep, _, _) in os.walk(args.dataset):
     if 'frames' in rep or 'Fr' in rep:
         print(">",rep)
+        start = dt.now()
         produceEvents(rep, args)
+        print(f'Time {rep}: {(dt.now() - start).total_seconds()} \n')
